@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import api from "../api/api";
 import { menuItems, statsCards, recentOrders } from "../data/dashboard.data";
+import { AuthContext } from "../context/AuthContext";
 
 function Dashboard() {
   const [data, setData] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
+  const { logout } = useContext(AuthContext);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -99,6 +101,12 @@ function Dashboard() {
                     </button>
                     <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
                       <span className="text-2xl">⚙️</span>
+                    </button>
+                    <button
+                      onClick={logout}
+                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                    >
+                      <span className="text-2xl">🚪</span>
                     </button>
                   </div>
                 </div>
