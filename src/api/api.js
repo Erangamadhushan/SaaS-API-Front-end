@@ -30,6 +30,12 @@ api.interceptors.response.use(
             localStorage.setItem('authToken', res.data.data.accessToken);
             localStorage.setItem('refreshToken', res.data.data.refreshToken);
 
+            // Defensively handle missing config or headers on the error object
+            if (!error.config) {
+                return Promise.reject(error);
+            }
+
+            error.config.headers = error.config.headers || {};
             error.config.headers['Authorization'] = `Bearer ${res.data.data.accessToken}`;
 
             return api.request(error.config);
