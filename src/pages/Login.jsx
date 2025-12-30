@@ -1,8 +1,7 @@
 import { useState, useContext } from "react";
-import api from '../api/api';
+import api from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
 
 function LoginPage() {
   const { login } = useContext(AuthContext);
@@ -22,8 +21,8 @@ function LoginPage() {
         password: formData.password,
       });
 
-      const token = response.data.data.token
-      const refreshToken = response.data.data.refreshToken
+      const token = response.data.data.token;
+      const refreshToken = response.data.data.refreshToken;
       console.log("Login response data:", token);
       login(token, refreshToken);
       navigate("/dashboard");

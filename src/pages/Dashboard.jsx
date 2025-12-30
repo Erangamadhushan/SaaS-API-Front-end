@@ -8,7 +8,7 @@ function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
-  const { logout } = useContext(AuthContext);
+  const { logout, logoutAll } = useContext(AuthContext);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -106,7 +106,13 @@ function Dashboard() {
                       onClick={logout}
                       className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
                     >
-                      <span className="text-2xl">🚪</span>
+                      <span className="text-2xl">logout</span>
+                    </button>
+                    <button
+                      onClick={logoutAll}
+                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                    >
+                      <span className="text-2xl">logout all</span>
                     </button>
                   </div>
                 </div>

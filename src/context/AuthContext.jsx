@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react';
+import api from '../api/api';
 
 export const AuthContext = createContext();
 
@@ -13,15 +14,34 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('refreshToken', refreshToken);
     }
 
-    const logout = () => {
+    const logout = async () => {
         setToken(null);
         setIsAuthenticated(false);
+
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        await api.post('/auth/logout', { refreshToken });
         localStorage.removeItem('authToken');
         localStorage.removeItem('refreshToken');
+
+        window.location.href = '/';
+    }
+
+    const logoutAll = async () => {
+        setToken(null);
+        setIsAuthenticated(false);
+
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        await api.post('/auth/logout-all', { refreshToken });
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('refreshToken');
+
+        window.location.href = '/';
     }
 
     return (
-        <AuthContext.Provider value={{ token, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ token, isAuthenticated, login, logout, logoutAll }}>
             {children}
         </AuthContext.Provider>
     )
