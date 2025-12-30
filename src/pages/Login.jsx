@@ -21,12 +21,14 @@ function LoginPage() {
         email: formData.email,
         password: formData.password,
       });
+
       const token = response.data.data.token
+      const refreshToken = response.data.data.refreshToken
       console.log("Login response data:", token);
-      login(token);
+      login(token, refreshToken);
       navigate("/dashboard");
     } catch (error) {
-      alert("Login failed!");
+      alert(error.response?.data?.message || "Login failed");
       console.error("Login error:", error);
     }
   };
