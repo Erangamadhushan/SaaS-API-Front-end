@@ -22,9 +22,9 @@ function LoginPage() {
       });
 
       const token = response.data.data.token;
-      const refreshToken = response.data.data.refreshToken;
+      // const refreshToken = response.data.data.refreshToken;
       console.log("Login response data:", token);
-      login(token, refreshToken);
+      login(token);
       navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");

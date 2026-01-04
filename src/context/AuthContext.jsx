@@ -1,28 +1,33 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import api from '../api/api';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem('authToken'));
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
+    const [token, setToken] = useState(localStorage.getItem('accessToken'));
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
 
-    const login = (token, refreshToken) => {
+    useEffect(() => {
+        const fetchCsrf = async () => {
+            const res = await api.get("/csrf-token");
+            localStorage.setItem("csrfToken", res.data.csrfToken);
+        };
+
+    fetchCsrf();
+    }, []);
+
+    const login = (token) => {
         setToken(token);
         setIsAuthenticated(true);
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem("accessToken", token);
     }
 
     const logout = async () => {
         setToken(null);
         setIsAuthenticated(false);
 
-        const refreshToken = localStorage.getItem('refreshToken');
-
-        await api.post('/auth/logout', { refreshToken });
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('refreshToken');
+        await api.post('/auth/logout');
+        localStorage.removeItem('accessToken');
 
         window.location.href = '/';
     }
@@ -31,11 +36,8 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         setIsAuthenticated(false);
 
-        const refreshToken = localStorage.getItem('refreshToken');
-
-        await api.post('/auth/logout-all', { refreshToken });
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('refreshToken');
+        await api.post('/auth/logout-all');
+        localStorage.removeItem('accessToken');
 
         window.location.href = '/';
     }
