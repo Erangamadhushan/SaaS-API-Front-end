@@ -22,7 +22,6 @@ function LoginPage() {
       });
 
       const token = response.data.data.token;
-      // const refreshToken = response.data.data.refreshToken;
       console.log("Login response data:", token);
       login(token);
       navigate("/dashboard");
